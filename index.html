@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Compound — 24-hour fintech hackathon for high schoolers</title>
-<meta name="description" content="Compound is a 24-hour virtual fintech hackathon for high school students, run by DevFintech." />
+<title>Fintech — 24-hour hackathon for high schoolers</title>
+<meta name="description" content="Fintech is a 24-hour virtual hackathon for high school students, run by DevFintech." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -326,14 +326,14 @@
 
 <div class="shell">
   <div class="card" id="card"></div>
-  <p class="footnote">Compound &middot; organized by DevFintech</p>
+  <p class="footnote">Fintech &middot; organized by DevFintech</p>
 </div>
 
 <script>
 /* ------------------------------------------------------------------
-   WHERE SIGNUPS GO
-   Leave blank to test — submissions log to the browser console.
-   Set to your Supabase / Formspree / Apps Script endpoint to go live.
+   PASTE YOUR GOOGLE APPS SCRIPT URL HERE
+   It looks like: https://script.google.com/macros/s/AKfy..../exec
+   Leave blank to test — submissions log to the console instead.
 ------------------------------------------------------------------- */
 const SUBMIT_ENDPOINT = "";
 
@@ -426,7 +426,7 @@ const screens = {
   intro: () => `
     <div class="screen">
       <p class="eyebrow">DevFintech presents</p>
-      <h1>Compound</h1>
+      <h1>Fintech</h1>
       <p class="lede">Twenty-four hours to build something that makes money make sense. Open to any high school student, anywhere.</p>
       <div class="facts">
         <span class="fact">Virtual</span>
@@ -670,7 +670,7 @@ async function submit(){
     if(SUBMIT_ENDPOINT){
       const res = await fetch(SUBMIT_ENDPOINT,{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
         body:JSON.stringify(payload)
       });
       if(!res.ok) throw new Error(res.status);
