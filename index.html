@@ -335,7 +335,7 @@
    It looks like: https://script.google.com/macros/s/AKfy..../exec
    Leave blank to test — submissions log to the console instead.
 ------------------------------------------------------------------- */
-const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbzGTDmRYXx6AT0v_3J4CmKJBK7IOfFMbWuPHQBInbYnczacDh23lFBb9K5FO-Qo16Ie/exec";
+const SUBMIT_ENDPOINT = "";
 
 const state = {
   role:null, school:"", grade:"", experience:"", tier:"",
@@ -455,7 +455,7 @@ const screens = {
     <div class="screen">
       <h2>Where do you go to school?</h2>
       <p class="hint">Used to group teams by region and confirm eligibility.</p>
-      ${field("school","School name",`<input type="text" id="school" value="${state.school}" placeholder="Archbishop Mitty High School" autocomplete="off">`)}
+      ${field("school","School name",`<input type="text" id="school" value="${state.school}" placeholder="Streamer High School" autocomplete="off">`)}
       ${field("grade","Grade this fall",`
         <select id="grade">
           <option value="">Select a grade</option>
