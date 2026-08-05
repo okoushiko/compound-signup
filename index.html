@@ -11,14 +11,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#8FB2E4;
-    --ink:#132C58;
-    --indigo:#2A5CC4;
-    --gold:#5E9CE8;
-    --card:#FFFFFF;
-    --muted:#546991;
-    --line:#8AAEDC;
-    --error:#C6285A;
+    --paper:#18181B;
+    --ink:#FFFFFF;
+    --indigo:#66AE87;
+    --gold:#84C6A2;
+    --card:#232327;
+    --muted:#A1A1A9;
+    --line:#33333A;
+    --error:#F2557F;
 
     --display:"Bricolage Grotesque","Helvetica Neue",sans-serif;
     --body:"Instrument Sans",-apple-system,BlinkMacSystemFont,sans-serif;
@@ -50,8 +50,9 @@
     position:fixed;
     inset:0;
     background:
-      radial-gradient(60% 45% at 15% 0%, rgba(47,98,200,.11), transparent 70%),
-      radial-gradient(50% 40% at 95% 100%, rgba(94,156,232,.16), transparent 70%);
+      radial-gradient(60% 45% at var(--bx, 15%) var(--by, 0%), rgba(102,174,135,.13), transparent 70%),
+      radial-gradient(50% 40% at var(--bx2, 95%) var(--by2, 100%), rgba(102,174,135,.10), transparent 70%);
+    transition:background-position .8s ease;
     pointer-events:none;
     z-index:0;
   }
@@ -68,7 +69,7 @@
     border:1px solid var(--line);
     border-radius:var(--r);
     padding:34px 38px 30px;
-    box-shadow:0 1px 2px rgba(21,48,95,.05), 0 18px 44px -22px rgba(21,48,95,.26);
+    box-shadow:0 1px 2px rgba(0,0,0,.4), 0 18px 44px -22px rgba(0,0,0,.65);
   }
 
   /* ---------- signature: the compounding curve ---------- */
@@ -116,6 +117,12 @@
     color:var(--indigo);
     margin-bottom:16px;
   }
+  h1 .dot{
+    color:var(--indigo);
+    text-shadow:
+      0 0 14px rgba(102,174,135,.5),
+      0 0 34px rgba(102,174,135,.3);
+  }
   h1{
     font-family:var(--display);
     font-weight:800;
@@ -126,8 +133,8 @@
   }
   h2{
     font-family:var(--display);
-    font-weight:700;
-    font-size:clamp(23px,5vw,29px);
+    font-weight:800;
+    font-size:clamp(25px,5.4vw,33px);
     line-height:1.14;
     letter-spacing:-.02em;
     margin-bottom:8px;
@@ -167,11 +174,11 @@
     cursor:pointer;
     transition:border-color .16s, background .16s, transform .16s;
   }
-  .opt:hover{border-color:#A6C4EA;transform:translateY(-1px)}
+  .opt:hover{border-color:#4C6E5B;transform:translateY(-1px)}
   .opt small{display:block;color:var(--muted);font-size:14px;margin-top:3px}
   .opt[aria-pressed="true"]{
     border-color:var(--indigo);
-    background:rgba(47,98,200,.05);
+    background:rgba(102,174,135,.05);
   }
   .opt[aria-pressed="true"] .tick{opacity:1}
   .opt .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -206,7 +213,7 @@
     font-family:var(--body);
     font-size:16px;
     color:var(--ink);
-    background:#F7FBFF;
+    background:#1D1D21;
     border:1.5px solid var(--line);
     border-radius:10px;
     padding:12px 14px;
@@ -221,7 +228,7 @@
     border-color:var(--indigo);
     background:#fff;
   }
-  ::placeholder{color:#8098BE}
+  ::placeholder{color:#6C6C77}
 
   .err{
     display:none;
@@ -252,10 +259,10 @@
     transition:background .16s, transform .16s, border-color .16s;
   }
   .btn-primary{background:var(--indigo);color:#fff}
-  .btn-primary:hover{background:#24509E;transform:translateY(-1px)}
+  .btn-primary:hover{background:#84C6A2;transform:translateY(-1px)}
   .btn-primary[disabled]{opacity:.5;cursor:not-allowed;transform:none}
   .btn-ghost{background:transparent;color:var(--muted);border-color:var(--line);padding:13px 18px}
-  .btn-ghost:hover{color:var(--ink);border-color:#A6C4EA}
+  .btn-ghost:hover{color:var(--ink);border-color:#4C6E5B}
   .spacer{flex:1}
 
   /* ---------- review ---------- */
@@ -436,7 +443,7 @@ const screens = {
   intro: () => `
     <div class="screen">
       <p class="eyebrow">DevFintech presents</p>
-      <h1>Compound Hacks</h1>
+      <h1>Compound Hacks<span class="dot">.</span></h1>
       <p class="lede">Twelve hours to build something that makes money make sense. Open to any high school student, anywhere.</p>
       <div class="facts">
         <span class="fact">In-Person</span>
@@ -697,8 +704,28 @@ async function submit(){
 }
 
 /* ---------- render + wiring ---------- */
+/* The mint bloom sits somewhere different on every step, so advancing the
+   form quietly moves the light instead of holding one fixed corner. */
+const BLOOM = [
+  ["12%","0%",  "92%","96%"],
+  ["88%","8%",  "10%","92%"],
+  ["50%","0%",  "84%","100%"],
+  ["8%", "18%", "96%","82%"],
+  ["94%","0%",  "22%","98%"],
+  ["30%","4%",  "78%","94%"],
+  ["70%","12%", "14%","88%"],
+  ["18%","0%",  "88%","100%"],
+  ["60%","6%",  "36%","96%"]
+];
+function moveBloom(){
+  const b = BLOOM[idx % BLOOM.length], r = document.documentElement.style;
+  r.setProperty("--bx",  b[0]); r.setProperty("--by",  b[1]);
+  r.setProperty("--bx2", b[2]); r.setProperty("--by2", b[3]);
+}
+
 function render(){
   notice = null;
+  moveBloom();
   const step = steps()[idx];
   card.innerHTML = (step === "intro" ? "" : meter()) + screens[step]();
   if(step !== "intro") placeDot();
